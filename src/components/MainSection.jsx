@@ -3,6 +3,11 @@
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { useState } from "react"
+import { v4 as uuidv4 } from 'uuid';
+
+
+
+
 const MainSection = () => {
 
   const [showPassword, setShowPassword] = useState(false);
@@ -28,15 +33,12 @@ const MainSection = () => {
   }
 
   const submitForm = () => {
-    console.log("submitted", formData);
-
-    const updatedPasswords = [...password, formData];
+    const updatedPasswords = [...password, { ...formData, id: uuidv4() }];
     setPassword(updatedPasswords);
     localStorage.setItem("password", JSON.stringify(updatedPasswords));
-    console.log(updatedPasswords);
 
     toast(`✅ Saved Successfully!`, {
-      position: "top-center",
+      position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: false,
@@ -51,7 +53,54 @@ const MainSection = () => {
       username: "",
       password: ""
     });
-  };
+  }
+
+  const deleteFormData = (uuid, msg) => {
+
+    const conf = confirm("Are you sure you want to delete this password?");
+    if (conf) {
+
+
+      const remainingData = password.filter((item) => {
+        return item.id !== uuid;
+      })
+      setPassword(remainingData);
+      localStorage.setItem("password", JSON.stringify(remainingData));
+
+      toast(`✅ Deleted!`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+
+  }
+  // funtion for editing the form data or updaating form data
+
+  const editFormData = (uuid) => {
+
+
+    console.log(uuid);
+    const itemsToEdit = password.find((item) => {
+      return item.id === uuid;
+    })
+
+    console.log(itemsToEdit);
+
+    setFormData(password.filter((items) => items.id === uuid)[0]);
+    const remainingData = password.filter((item) => {
+      return item.id !== uuid;
+    })
+    setPassword(remainingData);
+
+
+
+  }
 
 
   // for copying text to clipboard
@@ -61,16 +110,16 @@ const MainSection = () => {
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: false,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-  });
-  navigator.clipboard.writeText(text);
-}
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    navigator.clipboard.writeText(text);
+  }
 
 
-return (<>
+  return (<>
 
     <ToastContainer
       position="bottom-right"
@@ -83,7 +132,7 @@ return (<>
       draggable
       pauseOnHover
       theme="light"
-      />
+    />
     <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"><div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-green-400 opacity-20 blur-[100px]"></div></div>
 
     <div className="my-15 p-2  lg:p-4 flex flex-col gap-10">
@@ -119,13 +168,15 @@ return (<>
         </div>
       </div>
 
-      {password.length == 0 ? <div>no password to show</div> : <div className="gap-2 w-full  lg:w-3/4 lg:m-auto overflow-y-auto h-fit lg:max-h-[260px] flex-nowrap rounded-lg">
+      {password.length == 0 ? <div className='flex p-5 text-center justify-center lg:text-2xl font-bold'>
+        <h1><span className='text-green-400'>Oops!</span> Looks like it's empty.</h1>
+      </div> : <div className="gap-2 w-full  lg:w-3/4 lg:m-auto overflow-auto h-fit lg:max-h-[260px] flex-nowrap rounded-lg">
         {/* this div is for displaying save password  */}
 
-        <table class="table-auto w-full text-center">
+        <table className="table-auto w-full text-center  ">
           <thead className="bg-green-800">
 
-            <tr>
+            <tr className='text-sm md:text-lg'>
               <th>Website</th>
               <th>User</th>
               <th>Password</th>
@@ -136,46 +187,54 @@ return (<>
 
             {password.map((item, index) => {
               return (
-                <tr key={index}>
+                <tr key={index} className="text-[10px] md:text-[16px]">
                   <td className="lg:w-32 p-1.5 border border-white">
                     <div className="flex items-center justify-between">
                       {item.website}
                       <div className="cursor-pointer flex h-full items-center justify-center" onClick={() => copyText(item.website)}>
-                        <img src="/copy.svg" alt="copy icon" width={20} height={20} />
+                        <img src="/copy.svg" alt="copy icon" className="h-[15px] w-[15px] md:h-[20px] md:w-[20px]" />
                       </div>
                     </div>
                   </td>
-                  <td className="lg:w-32 p-1.5 border border-white"><div className="flex items-center justify-between">
-                    {item.username}
-                    <div className="cursor-pointer flex h-full items-center justify-center" onClick={() => copyText(item.username)}>
-                      <img src="/copy.svg" alt="copy icon" width={20} height={20} />
-                    </div>
-                  </div></td>
-                  <td className="lg:w-32 p-1.5 border border-white"><div className="flex items-center justify-between">
-                    {item.password}
-                    <div className="cursor-pointer flex h-full items-center justify-center" onClick={() => copyText(item.password)}>
-                      <img src="/copy.svg" alt="copy icon" width={20} height={20} />
-                    </div>
-                  </div></td>
 
-                  <td className="lg:w-32  border border-white font-semibold">
-                    <div className='flex justify-between'>
-
-                      <div className='flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3'>
-                        <span>Delete</span>
-                        <div>
-                          <img src="/delete.svg" alt="" width={20} height={20} />
-                        </div>
+                  <td className="lg:w-32 p-1.5 border border-white">
+                    <div className="flex items-center justify-between">
+                      {item.username}
+                      <div className="cursor-pointer flex h-full items-center justify-center" onClick={() => copyText(item.username)}>
+                        <img src="/copy.svg" alt="copy icon" className="h-[15px] w-[15px] md:h-[20px] md:w-[20px]" />
                       </div>
-                      <div className='flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3 '>
+                    </div>
+                  </td>
+
+                  <td className="lg:w-32 p-1.5 border border-white">
+                    <div className="flex items-center justify-between">
+                      {item.password}
+                      <div className="cursor-pointer flex h-full items-center justify-center" onClick={() => copyText(item.password)}>
+                        <img src="/copy.svg" alt="copy icon" className="h-[15px] w-[15px] md:h-[20px] md:w-[20px]" />
+                      </div>
+                    </div>
+                  </td>
+
+                  <td className="lg:w-32 border border-white font-semibold">
+                    <div className="flex justify-between">
+                      <div
+                        className="flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3"
+                        onClick={() => deleteFormData(item.id)}
+                      >
+                        <span>Delete</span>
+                        <img src="/delete.svg" alt="delete" className="h-[15px] w-[15px] md:h-[20px] md:w-[20px]" />
+                      </div>
+                      <div
+                        className="flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3"
+                        onClick={() => editFormData(item.id)}
+                      >
                         <span>Edit</span>
-                        <div>
-                          <img src="/edit.svg" alt="" width={15} height={15} />
-                        </div>
+                        <img src="/edit.svg" alt="edit" className="h-[12px] w-[12px] md:h-[18px] md:w-[18px]" />
                       </div>
                     </div>
                   </td>
                 </tr>
+
               )
             })}
 
@@ -190,7 +249,7 @@ return (<>
     </div>
 
   </>
-)
+  )
 }
 
 
