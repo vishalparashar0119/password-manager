@@ -4,31 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useState } from "react"
 const MainSection = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState([{
-    website: "gmail.com",
-    username: "rahul.sharma92",
-    password: "R@hulGmail2024"
-  },
-  {
-    website: "facebook.com",
-    username: "meena.kumari",
-    password: "Fb@Meena#789"
-  },
-  {
-    website: "twitter.com",
-    username: "arvind_dev",
-    password: "Tw1tt3r!Dev"
-  },
-  {
-    website: "linkedin.com",
-    username: "sneha.patil",
-    password: "Sneha_@Linked2025"
-  },
-  {
-    website: "amazon.in",
-    username: "vicky123",
-    password: "Am@zon#Buy456"
-  }]);
+  const [password, setPassword] = useState([]);
 
 
   const [formData, setFormData] = useState({
