@@ -1,10 +1,12 @@
 // complete status: incomplete
 // responsive status: incomplete
 import { ToastContainer, toast } from 'react-toastify';
-import { useState } from "react"
+import { useState, useEffect } from "react"
 const MainSection = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState([]);
+
+
 
 
   const [formData, setFormData] = useState({
@@ -13,21 +15,56 @@ const MainSection = () => {
     password: ""
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
+  // use effects for fetching data from mongo db storage
 
-  const submitForm = () => {
-    console.log("submitted", formData);
-    setPassword([...password, formData]);
+
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+      const req = await fetch("http://localhost:3000/");
+      const data = await req.json();
+      return data;
+    }
+
+    fetchData().then((data) => {
+      setPassword(data);
+    })
+
+  }, [password]);
+
+  // funtions  for sending password 
+
+  const submitForm = async () => {
+    const res = await fetch("http://localhost:3000/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+
+      
+    });
+    const data = await res.json();
+    console.log("data from server", data);
 
     setFormData({
       website: "",
       username: "",
       password: ""
     });
-
+    
   }
+
+
+
+
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
+
+  
   // for copying text to clipboard
   const copyText = (text) => {
     toast(`✅ copied to clipboard!`, {
@@ -94,11 +131,11 @@ const MainSection = () => {
         </div>
 
         {password.length == 0 ? <div className='flex p-5 text-center justify-center lg:text-2xl font-bold'>
-        <h1><span className='text-green-400'>Oops!</span> Looks like it's empty.</h1>
-      </div> : <div className="gap-2 w-full  lg:w-3/4 lg:m-auto overflow-y-auto h-fit lg:max-h-[260px] flex-nowrap rounded-lg">
+          <h1><span className='text-green-400'>Oops!</span> Looks like it's empty.</h1>
+        </div> : <div className="gap-2 w-full  lg:w-3/4 lg:m-auto overflow-y-auto h-fit lg:max-h-[260px] flex-nowrap rounded-lg">
           {/* this div is for displaying save password  */}
 
-          <table class="table-auto w-full text-center">
+          <table className="table-auto w-full text-center">
             <thead className="bg-green-800">
 
               <tr>
@@ -137,18 +174,18 @@ const MainSection = () => {
                     <td className="lg:w-32  border border-white font-semibold">
                       <div className='flex justify-between'>
 
-                      <div className='flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3'>
-                        <span>Delete</span>
-                        <div>
-                          <img src="/delete.svg" alt="" width={20} height={20} />
+                        <div className='flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3'>
+                          <span>Delete</span>
+                          <div>
+                            <img src="/delete.svg" alt="" width={20} height={20} />
+                          </div>
                         </div>
-                      </div>
-                      <div className='flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3 '>
-                        <span>Edit</span>
-                        <div>
-                          <img src="/edit.svg" alt="" width={15} height={15} />
+                        <div className='flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3 '>
+                          <span>Edit</span>
+                          <div>
+                            <img src="/edit.svg" alt="" width={15} height={15} />
+                          </div>
                         </div>
-                      </div>
                       </div>
                     </td>
                   </tr>
@@ -169,4 +206,4 @@ const MainSection = () => {
   )
 }
 
-export default MainSection
+export default MainSection;
