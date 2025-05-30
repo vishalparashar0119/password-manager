@@ -93,7 +93,9 @@ const MainSection = () => {
           </div>
         </div>
 
-        {password.length == 0 ? <div>no password to show</div> : <div className="gap-2 w-full  lg:w-3/4 lg:m-auto overflow-y-auto h-fit lg:max-h-[260px] flex-nowrap rounded-lg">
+        {password.length == 0 ? <div className='flex p-5 text-center justify-center lg:text-2xl font-bold'>
+        <h1><span className='text-green-400'>Oops!</span> Looks like it's empty.</h1>
+      </div> : <div className="gap-2 w-full  lg:w-3/4 lg:m-auto overflow-y-auto h-fit lg:max-h-[260px] flex-nowrap rounded-lg">
           {/* this div is for displaying save password  */}
 
           <table class="table-auto w-full text-center">
