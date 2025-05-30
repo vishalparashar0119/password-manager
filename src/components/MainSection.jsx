@@ -166,75 +166,83 @@ const MainSection = () => {
 
         {password.length == 0 ? <div className='flex p-5 text-center justify-center lg:text-2xl font-bold'>
           <h1><span className='text-green-400'>Oops!</span> Looks like it's empty.</h1>
-        </div> : <div className="gap-2 w-full  lg:w-3/4 lg:m-auto overflow-y-auto h-fit lg:max-h-[260px] flex-nowrap rounded-lg">
-          {/* this div is for displaying save password  */}
+        </div> : <div className="gap-2 w-full  lg:w-3/4 lg:m-auto overflow-auto h-fit lg:max-h-[260px] flex-nowrap rounded-lg">
+        {/* this div is for displaying save password  */}
 
-          <table className="table-auto w-full text-center">
-            <thead className="bg-green-800">
+        <table className="table-auto w-full text-center  ">
+          <thead className="bg-green-800">
 
-              <tr>
-                <th>Website</th>
-                <th>User</th>
-                <th>Password</th>
-                <th>Actions</th>
-              </tr>
-            </thead >
-            <tbody className="bg-green-200">
+            <tr className='text-sm md:text-lg'>
+              <th>Website</th>
+              <th>User</th>
+              <th>Password</th>
+              <th>Actions</th>
+            </tr>
+          </thead >
+          <tbody className="bg-green-200">
 
-              {password.map((item, index) => {
-                return (
-                  <tr key={index}>
-                    <td className="lg:w-32 p-1.5 border border-white">
-                      <div className="flex items-center justify-between">
-                        {item.website}
-                        <div className="cursor-pointer flex h-full items-center justify-center" onClick={() => copyText(item.website)}>
-                          <img src="/copy.svg" alt="copy icon" width={20} height={20} />
-                        </div>
+            {password.map((item, index) => {
+              return (
+                <tr key={index} className="text-[10px] md:text-[16px]">
+                  <td className="lg:w-32 p-1.5 border border-white">
+                    <div className="flex items-center justify-between">
+                      {item.website}
+                      <div className="cursor-pointer flex h-full items-center justify-center" onClick={() => copyText(item.website)}>
+                        <img src="/copy.svg" alt="copy icon" className="h-[15px] w-[15px] md:h-[20px] md:w-[20px]" />
                       </div>
-                    </td>
-                    <td className="lg:w-32 p-1.5 border border-white"><div className="flex items-center justify-between">
+                    </div>
+                  </td>
+
+                  <td className="lg:w-32 p-1.5 border border-white">
+                    <div className="flex items-center justify-between">
                       {item.username}
                       <div className="cursor-pointer flex h-full items-center justify-center" onClick={() => copyText(item.username)}>
-                        <img src="/copy.svg" alt="copy icon" width={20} height={20} />
+                        <img src="/copy.svg" alt="copy icon" className="h-[15px] w-[15px] md:h-[20px] md:w-[20px]" />
                       </div>
-                    </div></td>
-                    <td className="lg:w-32 p-1.5 border border-white"><div className="flex items-center justify-between">
+                    </div>
+                  </td>
+
+                  <td className="lg:w-32 p-1.5 border border-white">
+                    <div className="flex items-center justify-between">
                       {item.password}
                       <div className="cursor-pointer flex h-full items-center justify-center" onClick={() => copyText(item.password)}>
-                        <img src="/copy.svg" alt="copy icon" width={20} height={20} />
+                        <img src="/copy.svg" alt="copy icon" className="h-[15px] w-[15px] md:h-[20px] md:w-[20px]" />
                       </div>
-                    </div></td>
+                    </div>
+                  </td>
 
-                    <td className="lg:w-32  border border-white font-semibold">
-                      <div className='flex justify-between'>
-
-                        <div className='flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3' onClick={() => deletePassword(item._id)} >
-                          <span>Delete</span>
-                          <div>
-                            <img src="/delete.svg" alt="" width={20} height={20} />
-                          </div>
-                        </div>
-                        <div className='flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3 '>
-                          <span>Edit</span>
-                          <div>
-                            <img src="/edit.svg" alt="" width={15} height={15} />
-                          </div>
-                        </div>
+                  <td className="lg:w-32 border border-white font-semibold">
+                    <div className="flex justify-between">
+                      <div
+                        className="flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3"
+                        onClick={() => deletePassword(item._id)}
+                      >
+                        <span>Delete</span>
+                        <img src="/delete.svg" alt="delete" className="h-[15px] w-[15px] md:h-[20px] md:w-[20px]" />
                       </div>
-                    </td>
-                  </tr>
-                )
-              })}
+                      <div
+                        className="flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3"
+                        
+                      >
+                        <span>Edit</span>
+                        <img src="/edit.svg" alt="edit" className="h-[12px] w-[12px] md:h-[18px] md:w-[18px]" />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+              )
+            })}
 
 
-            </tbody>
-          </table>
+          </tbody>
+        </table>
 
 
 
-        </div>}
+      </div>}
 
-      </div>
+    </div>
 
     </>
   )
