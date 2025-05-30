@@ -43,7 +43,7 @@ const MainSection = () => {
       },
       body: JSON.stringify(formData)
 
-      
+
     });
     const data = await res.json();
     console.log("data from server", data);
@@ -53,7 +53,19 @@ const MainSection = () => {
       username: "",
       password: ""
     });
-    
+
+  }
+
+  const deletePassword = async (id) => {
+    console.log(id);
+    const res = await fetch("http://localhost:3000/", {
+      method: "DELETE", headers: {
+        "Content-Type": "application/json"
+      }, body: JSON.stringify({ id: id })
+    });
+
+    const data = await res.json();
+    console.log("data from server", data);
   }
 
 
@@ -64,7 +76,7 @@ const MainSection = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
-  
+
   // for copying text to clipboard
   const copyText = (text) => {
     toast(`✅ copied to clipboard!`, {
@@ -174,7 +186,7 @@ const MainSection = () => {
                     <td className="lg:w-32  border border-white font-semibold">
                       <div className='flex justify-between'>
 
-                        <div className='flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3'>
+                        <div className='flex justify-between items-center cursor-pointer w-2/4 hover:bg-green-300 py-1.5 px-3' onClick={() => deletePassword(item._id)} >
                           <span>Delete</span>
                           <div>
                             <img src="/delete.svg" alt="" width={20} height={20} />

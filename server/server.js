@@ -1,5 +1,5 @@
 import express from 'express';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import dotenv from 'dotenv';
 import cors from 'cors';
 dotenv.config();
@@ -43,8 +43,7 @@ app.post("/", async (req, res) => {
 app.delete("/", async (req, res) => {
     const data = req.body;
     const collection = db.collection("passwords");
-    const deletedResult = await collection.deleteOne(data);
-
+    const deletedResult = await collection.deleteOne({_id: new ObjectId(data.id)});
     res.send({success : true ,datat : deletedResult})
 })
 
