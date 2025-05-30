@@ -64,6 +64,17 @@ const MainSection = () => {
       }, body: JSON.stringify({ id: id })
     });
 
+    toast(`✅ Deleted!`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
     const data = await res.json();
     console.log("data from server", data);
   }
